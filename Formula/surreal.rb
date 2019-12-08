@@ -13,8 +13,8 @@ class Surreal < Formula
   end
 
   def caveats; <<~EOS
-    For local development only, this formula ships a launchd configuration to
-    start a single-node cluster that stores its data that stores its data under:
+    For local development only, this formula ships a launchd config
+    to start a single-node cluster that stores its data under:
       #{var}/
     The database is available on the default port of 8000:
       #{Formatter.url("http://localhost:8000")}
