@@ -8,6 +8,10 @@ class Surreal < Formula
 
   bottle :unneeded
 
+  def install
+    bin.install "surreal"
+  end
+
   def caveats; <<~EOS
     For local development only, this formula ships a launchd configuration to
     start a single-node cluster that stores its data that stores its data under:
