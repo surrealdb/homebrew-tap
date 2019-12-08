@@ -1,6 +1,6 @@
 class Surreal < Formula
   desc "A scalable, distributed, collaborative, document-graph database"
-  homepage "https://surreal.io"
+  homepage "https://surrealdb.com"
 
   version "0.1.0"
   url "https://download.surrealdb.com/surreal-v0.1.0.darwin-amd64.tgz"
