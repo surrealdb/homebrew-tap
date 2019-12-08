@@ -35,7 +35,7 @@ class Surreal < Formula
         <string>#{opt_bin}/surreal</string>
         <string>start</string>
         <string>--log-level=debug</string>
-        <string>--path=file:#{var}/surreal.db</string>
+        <string>--path=file://#{var}/surreal.db</string>
       </array>
       <key>WorkingDirectory</key>
       <string>#{var}</string>
