@@ -3,8 +3,8 @@ class Surreal < Formula
   homepage "https://surrealdb.com"
 
   version "0.1.1"
-  url "https://download.surrealdb.com/surreal-v0.1.1.darwin-amd64.tgz"
-  sha256 "9742ebd2dc002694dfe3d333b54afa8b2f9a324c57d5b936ddcb1de4808e1dbb"
+  url "https://download.surrealdb.com/surreal-v0.1.2.darwin-amd64.tgz"
+  sha256 "1e229d303b5173400bb99829d02412e38843737357f467ba92c0f9251806d61a"
 
   bottle :unneeded
 
