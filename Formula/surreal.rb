@@ -2,9 +2,9 @@ class Surreal < Formula
   desc "A scalable, distributed, collaborative, document-graph database"
   homepage "https://surrealdb.com"
 
-  version "0.1.17"
-  url "https://download.surrealdb.com/surreal-v0.1.17.darwin-amd64.tgz"
-  sha256 "8b67096860392eef51c3fa9a1b5fa06678feac4c2602c6b5fe4ea2c8e67edaf5"
+  version "0.1.18"
+  url "https://download.surrealdb.com/surreal-v0.1.18.darwin-universal.tgz"
+  sha256 "2d510a4ab5f02eed1cc9c4666dc1c8df10c396adaa6eb61be9a9ad7863d0250c"
 
   bottle :unneeded
 
