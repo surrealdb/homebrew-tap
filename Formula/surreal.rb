@@ -15,11 +15,11 @@ class Surreal < Formula
     to start a single-node cluster that stores its data under:
       #{var}/
     The database is available on the default port of 8000:
-      #{Formatter.url("http://localhost:8000")}
+      #{Formatter.url("http://localhost:3000")}
   EOS
   end
 
-  plist_options :manual => "surreal start --log-level debug --path memory"
+  plist_options :manual => "surreal -vvv start --user root --pass root memory"
 
   def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
@@ -31,9 +31,9 @@ class Surreal < Formula
       <key>ProgramArguments</key>
       <array>
         <string>#{opt_bin}/surreal</string>
+        <string>-vvv</string>
         <string>start</string>
-        <string>--log-level=debug</string>
-        <string>--path=file://#{var}/surreal.db</string>
+        <string>-file://#{var}/surreal.db</string>
       </array>
       <key>WorkingDirectory</key>
       <string>#{var}</string>
