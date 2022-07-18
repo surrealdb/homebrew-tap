@@ -29,7 +29,7 @@ $ brew install surrealdb/tap/surreal
 To start SurrealDB you can run:
 
 ```
-$ surreal start --log-level debug --path memory
+$ surreal -vvv start memory
 ```
 
 ### Run `surreal` as a service

@@ -15,7 +15,7 @@ class Surreal < Formula
     to start a single-node cluster that stores its data under:
       #{var}/
     The database is available on the default port of 8000:
-      #{Formatter.url("http://localhost:3000")}
+      #{Formatter.url("http://localhost:8000")}
   EOS
   end
 
