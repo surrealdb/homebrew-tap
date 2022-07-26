@@ -2,9 +2,9 @@ class Surreal < Formula
   desc "A scalable, distributed, collaborative, document-graph database"
   homepage "https://surrealdb.com"
 
-  version "1.0.0-beta.2"
-  url "https://download.surrealdb.com/v1.0.0-beta.2/surreal-v1.0.0-beta.2.darwin-universal.tgz"
-  sha256 "fb18e080de33eee5996487268477c9813bc51778a5b9071f487bdabd1f5afaed"
+  version "1.0.0-beta.3"
+  url "https://download.surrealdb.com/v1.0.0-beta.3/surreal-v1.0.0-beta.3.darwin-universal.tgz"
+  sha256 "3c1b0b8f1b1acea1da15bb652ad81b2c667a369e43c96c357ac4a63737bfc4bf"
 
   def install
     bin.install "surreal"
@@ -19,7 +19,7 @@ class Surreal < Formula
   EOS
   end
 
-  plist_options :manual => "surreal -vvv start --user root --pass root memory"
+  plist_options :manual => "surreal start --user root --pass root --log debug memory"
 
   def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
@@ -31,9 +31,12 @@ class Surreal < Formula
       <key>ProgramArguments</key>
       <array>
         <string>#{opt_bin}/surreal</string>
-        <string>-vvv</string>
         <string>start</string>
-        <string>-file://#{var}/surreal.db</string>
+        <string>--user</string>
+        <string>root</string>
+        <string>--pass</string>
+        <string>root</string>
+        <string>file://#{var}/surreal.db</string>
       </array>
       <key>WorkingDirectory</key>
       <string>#{var}</string>
