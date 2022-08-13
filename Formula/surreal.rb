@@ -36,6 +36,8 @@ class Surreal < Formula
         <string>root</string>
         <string>--pass</string>
         <string>root</string>
+        <string>--log</string>
+        <string>debug</string>
         <string>file://#{var}/surreal.db</string>
       </array>
       <key>WorkingDirectory</key>
