@@ -4,7 +4,7 @@ class Surreal < Formula
 
   version "1.0.0-beta.7"
   url "https://download.surrealdb.com/v1.0.0-beta.7/surreal-v1.0.0-beta.7.darwin-universal.tgz"
-  sha256 "f804205bc3da0a95c559fe0c171938c708217cbfbc12243ecd8572775f2641f4"
+  sha256 "2bc750d6fcb7c7fbd5b7e5d4fbdc238e74da54ad746d5e69197094b8d3be6e0a"
 
   def install
     bin.install "surreal"
