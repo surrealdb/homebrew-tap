@@ -4,6 +4,28 @@
 # file. It then uploads the latest release to
 # the homebrew tap repository.
 
+# ----------------------------------------
+# Nightly
+# ----------------------------------------
+
+# Get the latest release version identifier
+VERSION="nightly"
+
+# Get the latest release version file hash
+VERHASH=$(curl --silent --fail --location "https://download.surrealdb.com/${VERSION}/surreal-${VERSION}.darwin-universal.txt")
+
+# Fetch the homebrew release template file
+TEMPLATE=$(cat nightly.rb)
+TEMPLATE=$(echo "$TEMPLATE" | sed "s/{VERSION}/$VERSION/g")
+TEMPLATE=$(echo "$TEMPLATE" | sed "s/{VERHASH}/$VERHASH/g")
+
+# Save the release template to the file
+echo "$TEMPLATE" > Formula/surreal-nightly.rb
+
+# ----------------------------------------
+# Release
+# ----------------------------------------
+
 # Get the latest release version identifier
 VERSION=$(curl --silent --fail --location "https://version.surrealdb.com")
 
@@ -21,6 +43,10 @@ TEMPLATE=$(echo "$TEMPLATE" | sed "s/{VERHASH}/$VERHASH/g")
 
 # Save the release template to the file
 echo "$TEMPLATE" > Formula/surreal.rb
+
+# ----------------------------------------
+# Commit
+# ----------------------------------------
 
 # Add all changed files to the git commit
 git add --all
