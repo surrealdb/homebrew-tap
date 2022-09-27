@@ -2,7 +2,7 @@ class "surreal-nightly" < Formula
   desc "A scalable, distributed, collaborative, document-graph database"
   homepage "https://surrealdb.com"
 
-  version "nightly"
+  version :latest
   url "https://download.surrealdb.com/nightly/surreal-nightly.darwin-universal.tgz"
   sha256 :no_check
 

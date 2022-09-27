@@ -2,8 +2,8 @@ class "surreal-nightly" < Formula
   desc "A scalable, distributed, collaborative, document-graph database"
   homepage "https://surrealdb.com"
 
-  version "{VERSION}"
-  url "https://download.surrealdb.com/{VERSION}/surreal-{VERSION}.darwin-universal.tgz"
+  version :latest
+  url "https://download.surrealdb.com/nightly/surreal-nightly.darwin-universal.tgz"
   sha256 :no_check
 
   def install
