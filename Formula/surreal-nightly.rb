@@ -4,7 +4,7 @@ class "surreal-nightly" < Formula
 
   version "nightly"
   url "https://download.surrealdb.com/nightly/surreal-nightly.darwin-universal.tgz"
-  sha256 "39df493b81f64a38087e7fcf557c941d3a722313684e011ef3491494f232b5a6"
+  sha256 :no_check
 
   def install
     bin.install "surreal-nightly"
