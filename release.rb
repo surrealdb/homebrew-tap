@@ -1,4 +1,5 @@
 class Surreal < Formula
+  
   desc "A scalable, distributed, collaborative, document-graph database"
   homepage "https://surrealdb.com"
 
