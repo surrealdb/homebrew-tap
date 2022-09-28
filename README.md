@@ -2,46 +2,42 @@
 
 This is a custom [Homebrew](https://brew.sh) tap for SurrealDB.
 
-## Install
+### Latest release
 
-You can add the custom tap in a MacOS terminal session using:
+You can install the package in one command:
 
-```
-$ brew tap surrealdb/tap
-```
-
-Once the tap has been added locally, you can install SurrealDB with:
-
-```
-$ brew install surreal
+```bash
+brew install surrealdb/tap/surreal
 ```
 
-Alternatively you can configure the tap and install the package in one command:
+### Nightly release
 
+You can install the nightly release in one command:
+
+```bash
+brew install surrealdb/tap/surreal-nightly
 ```
-$ brew install surrealdb/tap/surreal
-```
 
-## Starting Surreal
+### Starting Surreal
 
-### Start `surreal` manually
+#### Start `surreal` manually
 
 To start SurrealDB you can run:
 
-```
-$ surreal -vvv start memory
+```bash
+surreal -vvv start memory
 ```
 
-### Run `surreal` as a service
+#### Run `surreal` as a service
 
 To have `launchd` start `surreal` and restart at login, run:
 
-```
-$ brew services start surreal
+```bash
+brew services start surreal
 ```
 
 To stop the server instance run:
 
-```
-$ brew services stop surreal
+```bash
+brew services stop surreal
 ```
