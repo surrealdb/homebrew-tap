@@ -20,36 +20,12 @@ class Surreal < Formula
   EOS
   end
 
-  plist_options :manual => "surreal start --user root --pass root --log debug memory"
-
-  def plist; <<~EOS
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-    <dict>
-      <key>Label</key>
-      <string>#{plist_name}</string>
-      <key>ProgramArguments</key>
-      <array>
-        <string>#{opt_bin}/surreal</string>
-        <string>start</string>
-        <string>--user</string>
-        <string>root</string>
-        <string>--pass</string>
-        <string>root</string>
-        <string>--log</string>
-        <string>debug</string>
-        <string>file://#{var}/surreal.db</string>
-      </array>
-      <key>WorkingDirectory</key>
-      <string>#{var}</string>
-      <key>RunAtLoad</key>
-      <true/>
-      <key>KeepAlive</key>
-      <true/>
-    </dict>
-    </plist>
-  EOS
+  service do
+    run [
+      #{opt_bin}/surreal start --user root --pass root debug file://#{var}/surreal.db
+    ]
+    working_dir #{var}
+    keep_alive true
   end
 
   test do
