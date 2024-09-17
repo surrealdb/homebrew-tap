@@ -3,9 +3,9 @@ class Surreal < Formula
   desc "A scalable, distributed, collaborative, document-graph database"
   homepage "https://surrealdb.com"
 
-  version "1.5.5"
-  url "https://download.surrealdb.com/v1.5.5/surreal-v1.5.5.darwin-universal.tgz"
-  sha256 "f3925de81cfc360921cf0d8f2cce8708edef6e728754fdf1eab88d8724583475"
+  version "2.0.0"
+  url "https://download.surrealdb.com/v2.0.0/surreal-v2.0.0.darwin-universal.tgz"
+  sha256 "8de068adf420cae3c137930c748db4be7c689d3ca4daba35f602ac47828c000f"
 
   def install
     bin.install "surreal"
