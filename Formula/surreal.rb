@@ -22,9 +22,9 @@ class Surreal < Formula
 
   service do
     run [
-      #{opt_bin}/surreal start --user root --pass root debug file://#{var}/surreal.db
+      opt_bin/"surreal", "start", "--user", "root", "--pass", "root", "--log", "debug", "file://#{var}/surreal.db"
     ]
-    working_dir #{var}
+    working_dir "#{var}"
     keep_alive true
   end
 
