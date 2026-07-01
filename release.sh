@@ -26,8 +26,11 @@ echo "$TEMPLATE" > Formula/surreal-nightly.rb
 # Release
 # ----------------------------------------
 
-# Get the latest release version identifier
-VERSION=$(curl --silent --fail --location "https://version.surrealdb.com")
+# Get the latest release version identifier. An explicit version may be passed
+# as the first argument (e.g. "v3.1.5") so the release pipeline can pin the
+# exact release instead of trusting the global "latest" pointer; with no
+# argument it falls back to that pointer, as manual runs do.
+VERSION="${1:-$(curl --silent --fail --location "https://version.surrealdb.com")}"
 
 # Get the latest release version file hash
 VERHASH=$(curl --silent --fail --location "https://download.surrealdb.com/${VERSION}/surreal-${VERSION}.darwin-universal.txt")
@@ -48,11 +51,18 @@ echo "$TEMPLATE" > Formula/surreal.rb
 # Commit
 # ----------------------------------------
 
-# Add all changed files to the git commit
-git add --all
+# When SKIP_GIT is set (e.g. from the release pipeline), only regenerate the
+# formula files and let the caller create the branch, commit and pull request.
+# Manual runs leave SKIP_GIT unset and commit + push directly, as before.
+if [ -z "${SKIP_GIT:-}" ]; then
 
-# Commit the new release to the repository
-git commit -m "Upgrade to ${VERSION}"
+	# Add all changed files to the git commit
+	git add --all
 
-# Deploy the latest release to Github
-git push
+	# Commit the new release to the repository
+	git commit -m "Upgrade to ${VERSION}"
+
+	# Deploy the latest release to Github
+	git push
+
+fi
