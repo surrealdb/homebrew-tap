@@ -15,7 +15,7 @@ VERSION="nightly"
 VERHASH=$(curl --silent --fail --location "https://download.surrealdb.com/${VERSION}/surreal-${VERSION}.darwin-universal.txt")
 
 # Fetch the homebrew release template file
-TEMPLATE=$(cat nightly.rb)
+TEMPLATE=$(cat templates/nightly.rb.tmpl)
 TEMPLATE=$(echo "$TEMPLATE" | sed "s/{VERSION}/$VERSION/g")
 TEMPLATE=$(echo "$TEMPLATE" | sed "s/{VERHASH}/$VERHASH/g")
 
@@ -39,7 +39,7 @@ VERHASH=$(curl --silent --fail --location "https://download.surrealdb.com/${VERS
 RELEASE="${VERSION:1}"
 
 # Fetch the homebrew release template file
-TEMPLATE=$(cat release.rb)
+TEMPLATE=$(cat templates/release.rb.tmpl)
 TEMPLATE=$(echo "$TEMPLATE" | sed "s/{RELEASE}/$RELEASE/g")
 TEMPLATE=$(echo "$TEMPLATE" | sed "s/{VERSION}/$VERSION/g")
 TEMPLATE=$(echo "$TEMPLATE" | sed "s/{VERHASH}/$VERHASH/g")
