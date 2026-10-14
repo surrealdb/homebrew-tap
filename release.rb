@@ -1,35 +1,64 @@
 class Surreal < Formula
-  
-  desc "A scalable, distributed, collaborative, document-graph database"
+  desc "Command-line interface for SurrealDB and its components"
   homepage "https://surrealdb.com"
+  # Versioned by the CLI. Until 3.2.3 this formula installed the database and
+  # carried its version, so the scheme is raised for `brew upgrade` to move
+  # those installs onto the CLI, whose versions start lower.
+  version "{CLI_RELEASE}"
+  version_scheme 1
 
-  version "{RELEASE}"
-  url "https://download.surrealdb.com/{VERSION}/surreal-{VERSION}.darwin-universal.tgz"
-  sha256 "{VERHASH}"
+  # `surreal` is the CLI. It installs and upgrades the database and every other
+  # component itself, into ~/.surrealdb, as it does when installed any other
+  # way; only upgrading the CLI itself is left to Homebrew.
+
+  on_macos do
+    on_arm do
+      url "https://download.surrealdb.com/cli/launcher/{CLI_VERSION}/surreal-{CLI_VERSION}.darwin-arm64.tgz"
+      sha256 "{CLI_DARWIN_ARM64}"
+    end
+    on_intel do
+      url "https://download.surrealdb.com/cli/launcher/{CLI_VERSION}/surreal-{CLI_VERSION}.darwin-amd64.tgz"
+      sha256 "{CLI_DARWIN_AMD64}"
+    end
+  end
+
+  on_linux do
+    on_arm do
+      url "https://download.surrealdb.com/cli/launcher/{CLI_VERSION}/surreal-{CLI_VERSION}.linux-arm64.tgz"
+      sha256 "{CLI_LINUX_ARM64}"
+    end
+    on_intel do
+      url "https://download.surrealdb.com/cli/launcher/{CLI_VERSION}/surreal-{CLI_VERSION}.linux-amd64.tgz"
+      sha256 "{CLI_LINUX_AMD64}"
+    end
+  end
 
   def install
     bin.install "surreal"
   end
 
-  def caveats; <<~EOS
-    For local development only, this formula ships a launchd config
-    to start a single-node cluster that stores its data under:
-      #{var}/
-    The database is available on the default port of 8000:
-      #{Formatter.url("http://localhost:8000")}
-  EOS
-  end
+  def caveats
+    <<~EOS
+      The database is not installed with the CLI. Install it, then start it:
+        surreal install db
+        surreal db start
 
-  service do
-    run [
-      #{opt_bin}/surreal start --user root --pass root debug file://#{var}/surreal.db
-    ]
-    working_dir #{var}
-    keep_alive true
+      `surreal help` lists the other components, such as `surreal cloud`.
+    EOS
   end
 
   test do
-    system "#{bin}/surreal version"
-  end
+    ENV["SURREAL_CLI_HOME"] = testpath/".surreal"
+    ENV["SURREAL_CLI_OFFLINE"] = "1"
 
+    version_output = shell_output("#{bin}/surreal --version")
+    assert_match(/^Surreal CLI #{Regexp.escape(version.to_s)}$/, version_output)
+    assert_match(/^\s*db\s+not installed$/, version_output)
+
+    # `surreal install db` must be the CLI's to run under Homebrew, as the
+    # caveats say. Offline it stops before any request, and says why: a CLI that
+    # refused to manage components under Homebrew would name Homebrew instead.
+    output = shell_output("#{bin}/surreal install db 2>&1", 9)
+    assert_match "SURREAL_CLI_OFFLINE", output
+  end
 end

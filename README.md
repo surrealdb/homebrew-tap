@@ -4,10 +4,20 @@ This is a custom [Homebrew](https://brew.sh) tap for SurrealDB.
 
 ### Latest release
 
-You can install the package in one command:
+You can install the SurrealDB CLI in one command:
 
 ```bash
 brew install surrealdb/tap/surreal
+```
+
+This installs `surreal`, the command-line interface to SurrealDB and its
+components. The formula is versioned by the CLI, and `brew upgrade` upgrades it.
+
+The CLI installs and upgrades the database and every other component itself,
+as it does when installed any other way. Install the database with:
+
+```bash
+surreal install db
 ```
 
 ### Nightly release
@@ -20,24 +30,8 @@ brew install surrealdb/tap/surreal-nightly
 
 ### Starting Surreal
 
-#### Start `surreal` manually
-
 To start SurrealDB you can run:
 
 ```bash
-surreal -vvv start memory
-```
-
-#### Run `surreal` as a service
-
-To have `launchd` start `surreal` and restart at login, run:
-
-```bash
-brew services start surreal
-```
-
-To stop the server instance run:
-
-```bash
-brew services stop surreal
+surreal db start memory
 ```
