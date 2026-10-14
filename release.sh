@@ -2,25 +2,24 @@
 # This script fetches binary release versions from the
 # global SurrealDB downloads repository, along with the
 # hashes of the release files, and writes them into the
-# formulae in this tap.
+# formulae in this tap, from the templates in templates/.
 #
-# Formula/surreal.rb installs the CLI, `surreal`, and is
-# versioned by it. The CLI installs the database itself.
+# Formula/surreal.rb is the CLI, `surreal`, versioned by
+# the CLI. Formula/surreal-db.rb is the database alone, as
+# `surreal-db`, versioned by the database.
 #
-#   ./release.sh                   the CLI to its latest release, and the nightly
-#   ./release.sh launcher v0.2.0   the CLI to v0.2.0, and the nightly
-#   ./release.sh v3.3.4            as with no argument
+#   ./release.sh                   both to their latest releases
+#   ./release.sh v3.3.4            the database to v3.3.4
+#   ./release.sh db v3.3.4         the same
+#   ./release.sh launcher v0.2.0   the CLI to v0.2.0
 #
-# The last form is how the database's release pipeline
-# calls this script, naming the database version. The
-# formula no longer carries the database, so that version
-# is ignored, and the CLI is brought up to its latest
-# release instead: the pipeline then opens a bump only if
-# the CLI has moved since the formula was last bumped.
+# A bare version is the database's: that is how the
+# database's release pipeline calls this script.
 
 set -euo pipefail
 
 BASE="https://download.surrealdb.com"
+PLATFORMS="darwin-arm64 darwin-amd64 linux-arm64 linux-amd64"
 
 fetch() {
 	curl --silent --fail --location "$1"
@@ -37,49 +36,74 @@ sha() {
 	echo "$hash"
 }
 
+# The key a platform's hash is filled in under: darwin-arm64 is DARWIN_ARM64
+platform_key() {
+	echo "$1" | tr '[:lower:]-' '[:upper:]_'
+}
+
+DB_VERSION=""
+CLI_VERSION=""
+
 case "${1:-}" in
+	"")
+		DB_VERSION=$(fetch "https://version.surrealdb.com")
+		CLI_VERSION=$(fetch "$BASE/cli/launcher/latest.txt")
+		;;
+	db)
+		DB_VERSION="${2:?usage: release.sh db v<version>}"
+		;;
 	launcher)
 		CLI_VERSION="${2:?usage: release.sh launcher v<version>}"
 		;;
-	"")
-		CLI_VERSION=$(fetch "$BASE/cli/launcher/latest.txt")
-		;;
 	*)
-		echo "The surreal formula no longer carries the database; ignoring $1 and bringing the CLI to its latest release." >&2
-		CLI_VERSION=$(fetch "$BASE/cli/launcher/latest.txt")
+		DB_VERSION="$1"
 		;;
 esac
 
+DB_VERSION=$(echo "$DB_VERSION" | tr -d '[:space:]')
 CLI_VERSION=$(echo "$CLI_VERSION" | tr -d '[:space:]')
 
 # ----------------------------------------
-# Nightly
+# Database
 # ----------------------------------------
 
-# Fetch the homebrew nightly template file
-TEMPLATE=$(cat nightly.rb)
-TEMPLATE=$(echo "$TEMPLATE" | sed "s/{VERSION}/nightly/g")
+if [ -n "$DB_VERSION" ]; then
 
-# Save the nightly template to the file
-echo "$TEMPLATE" > Formula/surreal-nightly.rb
+	# Fetch the homebrew database template file
+	TEMPLATE=$(cat templates/surreal-db.rb.tmpl)
+	TEMPLATE=$(echo "$TEMPLATE" | sed "s/{DB_RELEASE}/${DB_VERSION#v}/g")
+	TEMPLATE=$(echo "$TEMPLATE" | sed "s/{DB_VERSION}/$DB_VERSION/g")
+
+	for PLATFORM in $PLATFORMS; do
+		HASH=$(sha "$BASE/$DB_VERSION/surreal-$DB_VERSION.$PLATFORM.txt")
+		TEMPLATE=$(echo "$TEMPLATE" | sed "s/{DB_$(platform_key "$PLATFORM")}/$HASH/g")
+	done
+
+	# Save the database template to the file
+	echo "$TEMPLATE" > Formula/surreal-db.rb
+
+fi
 
 # ----------------------------------------
-# Release
+# CLI
 # ----------------------------------------
 
-# Fetch the homebrew release template file
-TEMPLATE=$(cat release.rb)
-TEMPLATE=$(echo "$TEMPLATE" | sed "s/{CLI_RELEASE}/${CLI_VERSION#v}/g")
-TEMPLATE=$(echo "$TEMPLATE" | sed "s/{CLI_VERSION}/$CLI_VERSION/g")
+if [ -n "$CLI_VERSION" ]; then
 
-for PLATFORM in darwin-arm64 darwin-amd64 linux-arm64 linux-amd64; do
-	PLATFORM_KEY=$(echo "$PLATFORM" | tr '[:lower:]-' '[:upper:]_')
-	CLI_HASH=$(sha "$BASE/cli/launcher/$CLI_VERSION/surreal-$CLI_VERSION.$PLATFORM.txt")
-	TEMPLATE=$(echo "$TEMPLATE" | sed "s/{CLI_$PLATFORM_KEY}/$CLI_HASH/g")
-done
+	# Fetch the homebrew CLI template file
+	TEMPLATE=$(cat templates/surreal.rb.tmpl)
+	TEMPLATE=$(echo "$TEMPLATE" | sed "s/{CLI_RELEASE}/${CLI_VERSION#v}/g")
+	TEMPLATE=$(echo "$TEMPLATE" | sed "s/{CLI_VERSION}/$CLI_VERSION/g")
 
-# Save the release template to the file
-echo "$TEMPLATE" > Formula/surreal.rb
+	for PLATFORM in $PLATFORMS; do
+		HASH=$(sha "$BASE/cli/launcher/$CLI_VERSION/surreal-$CLI_VERSION.$PLATFORM.txt")
+		TEMPLATE=$(echo "$TEMPLATE" | sed "s/{CLI_$(platform_key "$PLATFORM")}/$HASH/g")
+	done
+
+	# Save the CLI template to the file
+	echo "$TEMPLATE" > Formula/surreal.rb
+
+fi
 
 # ----------------------------------------
 # Commit
@@ -94,7 +118,7 @@ if [ -z "${SKIP_GIT:-}" ]; then
 	git add --all
 
 	# Commit the new release to the repository
-	git commit -m "Upgrade to the CLI ${CLI_VERSION}"
+	git commit -m "Upgrade to${DB_VERSION:+ surreal-db $DB_VERSION}${CLI_VERSION:+ surreal $CLI_VERSION}"
 
 	# Deploy the latest release to Github
 	git push

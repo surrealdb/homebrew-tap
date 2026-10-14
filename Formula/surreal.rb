@@ -43,6 +43,9 @@ class Surreal < Formula
         surreal install db
         surreal db start
 
+      To have Homebrew provide the database instead, install `surreal-db`:
+        brew install surrealdb/tap/surreal-db
+
       `surreal help` lists the other components, such as `surreal cloud`.
     EOS
   end
