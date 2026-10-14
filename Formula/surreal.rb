@@ -54,9 +54,11 @@ class Surreal < Formula
     ENV["SURREAL_CLI_HOME"] = testpath/".surreal"
     ENV["SURREAL_CLI_OFFLINE"] = "1"
 
+    # The database is whatever `surreal-db` the CLI finds, if any: a CLI with
+    # none of its own runs the one `surreal-db` puts on PATH.
     version_output = shell_output("#{bin}/surreal --version")
     assert_match(/^Surreal CLI #{Regexp.escape(version.to_s)}$/, version_output)
-    assert_match(/^\s*db\s+not installed$/, version_output)
+    assert_match(/^\s*db\s+\S/, version_output)
 
     # `surreal install db` must be the CLI's to run under Homebrew, as the
     # caveats say. Offline it stops before any request, and says why: a CLI that
