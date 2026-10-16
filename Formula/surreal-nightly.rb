@@ -1,35 +1,17 @@
 class SurrealNightly < Formula
-  
-  desc "A scalable, distributed, collaborative, document-graph database"
+  desc "Scalable, distributed, collaborative, document-graph database (nightly)"
   homepage "https://surrealdb.com"
-
-  version "nightly"
+  # The nightly is rebuilt under one URL, so it has no checksum to pin, and
+  # Homebrew no longer lets a formula skip one. The CLI installs, verifies and
+  # upgrades nightlies itself: `surreal install db@nightly`. Disabled, this is
+  # never downloaded; the checksum is one past build's, for the formula to load.
   url "https://download.surrealdb.com/nightly/surreal-nightly.darwin-universal.tgz"
-  sha256 :no_check
+  version "nightly"
+  sha256 "7210802961b1eca465bcda7d133db4ec89afef3f2dd237d5a988e5b0f606f209"
+
+  disable! date: "2026-10-13", because: "is replaced by `surreal install db@nightly`", replacement_formula: "surreal"
 
   def install
-    bin.install "surreal-nightly"
+    bin.install "surreal" => "surreal-nightly"
   end
-
-  def caveats; <<~EOS
-    For local development only, this formula ships a launchd config
-    to start a single-node cluster that stores its data under:
-      #{var}/
-    The database is available on the default port of 8000:
-      #{Formatter.url("http://localhost:8000")}
-  EOS
-  end
-
-  service do
-    run [
-      #{opt_bin}/surreal start --user root --pass root debug file://#{var}/surreal.db
-    ]
-    working_dir #{var}
-    keep_alive true
-  end
-
-  test do
-    system "#{bin}/surreal version"
-  end
-
 end
