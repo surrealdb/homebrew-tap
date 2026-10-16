@@ -54,11 +54,16 @@ class Surreal < Formula
     ENV["SURREAL_CLI_HOME"] = testpath/".surreal"
     ENV["SURREAL_CLI_OFFLINE"] = "1"
 
-    # The database is whatever `surreal-db` the CLI finds, if any: a CLI with
-    # none of its own runs the one `surreal-db` puts on PATH.
-    version_output = shell_output("#{bin}/surreal --version")
-    assert_match(/^Surreal CLI #{Regexp.escape(version.to_s)}$/, version_output)
-    assert_match(/^\s*db\s+\S/, version_output)
+    # `--version` is one line led by the version, which is how the CLI tells
+    # which version of a component is installed; `--json` gives the same as a
+    # document.
+    assert_match(/\A#{Regexp.escape(version.to_s)} for \S+ on \S+$/, shell_output("#{bin}/surreal --version"))
+    assert_equal version.to_s, JSON.parse(shell_output("#{bin}/surreal --version --json"))["version"]
+
+    # `surreal list` reports each component, the database among them: with none
+    # of its own, the CLI runs the one `surreal-db` puts on PATH.
+    components = JSON.parse(shell_output("#{bin}/surreal list --json"))["components"]
+    assert_includes components.map { |component| component["name"] }, "db"
 
     # `surreal install db` must be the CLI's to run under Homebrew, as the
     # caveats say. Offline it stops before any request, and says why: a CLI that
