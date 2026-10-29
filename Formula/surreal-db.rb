@@ -1,7 +1,7 @@
 class SurrealDb < Formula
   desc "Scalable, distributed, collaborative, document-graph database"
   homepage "https://surrealdb.com"
-  version "3.3.4"
+  version "3.3.5"
 
   # The database alone, as the `surreal` formula installed it until 3.2.3. Its
   # executable is `surreal-db`, because `surreal` is now the CLI, which runs
@@ -10,23 +10,23 @@ class SurrealDb < Formula
 
   on_macos do
     on_arm do
-      url "https://download.surrealdb.com/v3.3.4/surreal-v3.3.4.darwin-arm64.tgz"
-      sha256 "d0b0afc47948a46ceac9db178d2a10a7eb21e1c4f219a74b3573c850122ed9fb"
+      url "https://download.surrealdb.com/v3.3.5/surreal-v3.3.5.darwin-arm64.tgz"
+      sha256 "534140236e7246d86969015ba9ae8dd2f7f8f277ed1412cb17f3d397f95a1090"
     end
     on_intel do
-      url "https://download.surrealdb.com/v3.3.4/surreal-v3.3.4.darwin-amd64.tgz"
-      sha256 "0723b555340da2cee1e0cff6f95552438536eab8d984b91f227b3ce2d52a5006"
+      url "https://download.surrealdb.com/v3.3.5/surreal-v3.3.5.darwin-amd64.tgz"
+      sha256 "a274451b30cf639df3b180b0e82ab8f7c52bc5244fa66aa65155a085f3eb6d31"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://download.surrealdb.com/v3.3.4/surreal-v3.3.4.linux-arm64.tgz"
-      sha256 "978262fd9d1f3adfc5791031663855baf0a3cf8a89883428109734ba5a065811"
+      url "https://download.surrealdb.com/v3.3.5/surreal-v3.3.5.linux-arm64.tgz"
+      sha256 "de945afaf48660a0d7370d7f631dc964a4cceb46b9cfe0c92ede9061df4cc5e6"
     end
     on_intel do
-      url "https://download.surrealdb.com/v3.3.4/surreal-v3.3.4.linux-amd64.tgz"
-      sha256 "6593071833ad9c85cf533cf70b1643eb08966c868f8624001e30839ea29a2689"
+      url "https://download.surrealdb.com/v3.3.5/surreal-v3.3.5.linux-amd64.tgz"
+      sha256 "8f3bc163405085343fc6db9746a8e0cd55503c939802ad2b35a466675a9c09cf"
     end
   end
 
